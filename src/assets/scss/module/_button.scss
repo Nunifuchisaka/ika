@@ -1,0 +1,13 @@
+
+/*
+## .button-1
+*/
+
+.button-1 {
+  @include button-reset();
+  
+  cursor: pointer;
+  &:hover {
+    @include opacity(.7);
+  }
+}
