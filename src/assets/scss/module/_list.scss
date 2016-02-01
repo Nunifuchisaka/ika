@@ -1,0 +1,30 @@
+/*
+## .list-1
+*/
+
+.list-1 {
+  overflow: hidden;
+}
+
+.list-1__items {
+  margin-top: -.5em;
+}
+
+.list-1__item {
+  //overflow: hidden;
+  margin-top: .5em;
+  display: table;
+  width: 100%;
+}
+
+.list-1__item__1 {
+  //float: left;
+  display: table-cell;
+  width: 130px;
+}
+
+.list-1__item__2 {
+  //overflow: hidden;
+  display: table-cell;
+  padding-left: 14px;
+}

@@ -3,9 +3,12 @@
 */
 
 .l-footer-1 {
-  
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: dotted 1px #666;
 }
 
 .l-footer-1__copyright {
-  
+  text-align: center;
+  font-size: $px11;
 }

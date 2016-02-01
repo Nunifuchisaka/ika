@@ -8,7 +8,7 @@ html {
 
 body {
   -webkit-text-size-adjust: 100%;
-  min-width: 1080px;
+  //min-width: 1080px;
   height: 100%;
   font: 14px/1.4 $font-family;
 }
@@ -28,10 +28,23 @@ a {
   }
 }
 
+small {
+  font-size: $px12;
+}
+
 strong {
   //font-weight: bold;
 }
 
 em {
   //color: #da0000;
+}
+
+input,
+textarea {
+  font-size: 16px;
+}
+
+button {
+  font-size: 100%;
 }

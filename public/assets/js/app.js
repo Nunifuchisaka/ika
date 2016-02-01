@@ -3,229 +3,47 @@
 
 var socket = io();
 
-var categorys_jp = ['シューター', 'ブラスター', 'ローラー', '筆', 'チャージャー', 'スロッシャー', 'スピナー']
-
-var weapons = [
-  {
-    name: 'わかばシューター',
-    category: 0
-  }, {
-    name: 'もみじシューター',
-    category: 0
-  }, {
-    name: 'スプラシューター',
-    category: 0
-  }, {
-    name: 'スプラシューターコラボ',
-    category: 0
-  }, {
-    name: '.52ガロン',
-    category: 0
-  }, {
-    name: 'N-ZAP85',
-    category: 0
-  }, {
-    name: 'シャープマーカー',
-    category: 0
-  }, {
-    name: 'プロモデラーMG',
-    category: 0
-  }, {
-    name: 'N-ZAP89',
-    category: 0
-  }, {
-    name: 'ジェットスイーパー',
-    category: 0
-  }, {
-    name: 'L3リールガン',
-    category: 0
-  }, {
-    name: 'シャープマーカーネオ',
-    category: 0
-  }, {
-    name: 'ホットブラスター',
-    category: 1
-  }, {
-    name: 'H3リールガン',
-    category: 0
-  }, {
-    name: 'プライムシューター',
-    category: 0
-  }, {
-    name: '.52ガロンデコ',
-    category: 0
-  }, {
-    name: 'ノヴァブラスター',
-    category: 0
-  }, {
-    name: '.96ガロン',
-    category: 0
-  }, {
-    name: 'ボールドマーカー',
-    category: 0
-  }, {
-    name: 'L3リールガンD',
-    category: 0
-  }, {
-    name: 'プロモデラーRG',
-    category: 0
-  }, {
-    name: '.96ガロンデコ',
-    category: 0
-  }, {
-    name: 'H3リールガンD',
-    category: 0
-  }, {
-    name: 'ラピッドブラスター',
-    category: 1
-  }, {
-    name: 'ロングブラスター',
-    category: 1
-  }, {
-    name: 'ジェットスイーパーカスタム',
-    category: 0
-  }, {
-    name: 'ノヴァブラスターネオ',
-    category: 0
-  }, {
-    name: 'Rブラスターエリート',
-    category: 1
-  }, {
-    name: 'デュアルスイーパー',
-    category: 0
-  }, {
-    name: 'ホットブラスターカスタム',
-    category: 0
-  }, {
-    name: 'ロングブラスターカスタム',
-    category: 0
-  }, {
-    name: 'デュアルスイーパーカスタム',
-    category: 0
-  }, {
-    name: 'ボールドマーカーネオ',
-    category: 0
-  }, {
-    name: 'ラピッドブラスターデコ',
-    category: 1
-  }, {
-    name: 'Rブラスターエリートデコ',
-    category: 0
-  }, {
-    name: 'プライムシューターコラボ',
-    category: 0
-  }, {
-    name: 'スプラローラー',
-    category: 2
-  }, {
-    name: 'スプラローラーコラボ',
-    category: 2
-  }, {
-    name: 'パブロ',
-    category: 3
-  }, {
-    name: 'カーボンローラー',
-    category: 2
-  }, {
-    name: 'パブロ・ヒュー',
-    category: 3
-  }, {
-    name: 'ホクサイ',
-    category: 3
-  }, {
-    name: 'カーボンローラーデコ',
-    category: 2
-  }, {
-    name: 'ダイナモローラー',
-    category: 2
-  }, {
-    name: 'ホクサイ・ヒュー',
-    category: 3
-  }, {
-    name: 'ダイナモローラーテスラ',
-    category: 2
-  }, {
-    name: 'スプラチャージャー',
-    category: 4
-  }, {
-    name: 'スプラチャージャーワカメ',
-    category: 4
-  }, {
-    name: 'スクイックリンα',
-    category: 4
-  }, {
-    name: 'スクイックリンβ',
-    category: 4
-  }, {
-    name: 'スプラスコープ',
-    category: 4
-  }, {
-    name: '14式竹筒銃・甲',
-    category: 4
-  }, {
-    name: '14式竹筒銃・乙',
-    category: 4
-  }, {
-    name: 'スプラスコープワカメ',
-    category: 4
-  }, {
-    name: 'リッター3K',
-    category: 4
-  }, {
-    name: '3Kスコープ',
-    category: 4
-  }, {
-    name: 'リッター3Kカスタム',
-    category: 4
-  }, {
-    name: '3Kスコープカスタム',
-    category: 4
-  }, {
-    name: 'バケットスロッシャー',
-    category: 5
-  }, {
-    name: 'ヒッセン',
-    category: 5
-  }, {
-    name: 'バケットスロッシャーデコ',
-    category: 5
-  }, {
-    name: 'スクリュースロッシャー',
-    category: 5
-  }, {
-    name: 'ヒッセン・ヒュー',
-    category: 5
-  }, {
-    name: 'スクリュースロッシャーネオ',
-    category: 5
-  }, {
-    name: 'バレルスピナー',
-    category: 6
-  }, {
-    name: 'スプラスピナー',
-    category: 6
-  }, {
-    name: 'バレルスピナーデコ',
-    category: 6
-  }, {
-    name: 'ハイドラント',
-    category: 6
-  }, {
-    name: 'スプラスピナーコラボ',
-    category: 6
-  }, {
-    name: 'ハイドラントカスタム',
-    category: 6
-  }
-];
-
-
 var player_num = 8;
+
+
+function notice( message ) {
+    // Notificationを取得
+    var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+ 
+    // Notificationの権限チェック
+    Notification.requestPermission(function (permission) {
+        // console.log(permission);
+    });
+ 
+    // 通知インスタンス生成
+    var notify = new Notification('ブキチくん', {
+      body: message,
+      icon: "assets/img/notification-icon-1.png"
+    });
+    setTimeout(function() {
+      notify.close();
+    }, 5000);
+    notify.onclick = function () {
+      console.log("onclick");
+    };
+    notify.onerror = function () {
+      console.log("onerror");
+    };
+    notify.onshow = function () {
+      console.log("onshow");
+    };
+    notify.onclose = function () {
+      console.log("onclose");
+    };
+}
 
 
 var ViewModel = Backbone.Model.extend({
   defaults: function() {
+    console.log( new XDate().toString('yyyy/MM/dd') );
     return {
+      finalUpdateTime: new XDate().toString('h時m分s秒'),
+      finalUpdateDate: new XDate().toString('yyyy年MM月dd日'),
       weaponsItemHTML: ''
     }
   }
@@ -264,11 +82,11 @@ var Player = Backbone.Model.extend({
     console.log('changeBuki');
     var buki = this.get('buki');
     if(null != buki) {
-      this.set('buki_jp', weapons[buki].name);
+      this.set('buki_jp', ca.weapons[buki].name);
     }
   },
   shuffleWeapon: function() {
-    var i = Math.floor( Math.random() * weapons.length );
+    var i = Math.floor( Math.random() * ca.weapons.length );
     var name = this.get('name');
     if( '' != name ) {
       this.set({
@@ -372,6 +190,7 @@ var View = Backbone.View.extend({
     //console.log('receive_data', data, typeof data);
     this.attrs.set(data, {silent: true});
     this.render();
+    notice('シャッフルしたでし！');
   },
   
   render: function() {

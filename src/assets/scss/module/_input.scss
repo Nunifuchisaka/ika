@@ -1,0 +1,27 @@
+/*
+## .input-1
+*/
+
+.input-1 {
+  width: 100%;
+  padding: 10px;
+  //font-size:1.3em;
+  //font-family:Arial, sans-serif;
+  //color:#aaa;
+  border: solid 1px #ccc;
+  -moz-box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
+  -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: inner 0 0 4px rgba(0, 0, 0, 0.2);
+  @include box-sizing(border-box);
+}
+
+.theme-black-1 {
+  .input-1 {
+    color: #f7f7f7;
+    background-color: #333;
+    border-color: #999;
+    -moz-box-shadow: inset 0 0 4px rgba(255,255,255,0.2);
+    -webkit-box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.2);
+    box-shadow: inner 0 0 4px rgba(255, 255, 255, 0.2);
+  }
+}

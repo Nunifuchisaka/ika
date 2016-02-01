@@ -3,5 +3,18 @@
 */
 
 .l-header-1 {
-  
+  display: table;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.l-header-1__1 {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.l-header-1__2 {
+  display: table-cell;
+  width: 25px;
+  vertical-align: middle;
 }
