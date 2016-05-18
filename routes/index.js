@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+//console.log('index');
+
 router.get('/', function(req, res) {
-  res.render('index', { title: 'CambriArms' });
+  //res.send('respond with a resource');
+  //res.render('index', { title: 'CambriArms' });
 });
 
 module.exports = router;

@@ -2,6 +2,7 @@
 'use strict';
 
 var socket = io();
+//var socket = io.connect('http://localhost:3000/chat/1?id=1');
 
 var player_num = 8;
 
@@ -50,7 +51,13 @@ var ViewModel = Backbone.Model.extend({
 });
 
 
+
+/*
+## プレイヤー
+*/
+
 var Player = Backbone.Model.extend({
+  
   defaults: function() {
     return {
       index: 0,
@@ -59,6 +66,7 @@ var Player = Backbone.Model.extend({
       buki_jp: ''
     }
   },
+  
   initialize: function() {
     _.bindAll(this, 'changeBuki', 'changeName', 'shuffleWeapon');
     //this.on('change', _.bind());
@@ -70,21 +78,24 @@ var Player = Backbone.Model.extend({
       //console.log(self.toJSON());
     });
   },
+  
   changeName: function() {
-    console.log('changeName');
-    var name = this.get('name'),
-        buki = this.get('buki');
+    var buki = this.get('buki');
     if( null === buki ) {
       this.shuffleWeapon();
     }
   },
+  
   changeBuki: function() {
-    console.log('changeBuki');
-    var buki = this.get('buki');
+    var name = this.get('name'),
+        buki = this.get('buki');
     if(null != buki) {
-      this.set('buki_jp', ca.weapons[buki].name);
+      var buki_jp = ca.weapons[buki].name;
+      console.log('change buki', name, buki, buki_jp);
+      this.set('buki_jp', buki_jp);
     }
   },
+  
   shuffleWeapon: function() {
     var i = Math.floor( Math.random() * ca.weapons.length );
     var name = this.get('name');
@@ -94,8 +105,14 @@ var Player = Backbone.Model.extend({
       });
     }
   }
+  
 });
 
+
+
+/*
+## プレイヤーリスト
+*/
 
 var PlayerList = Backbone.Collection.extend({
   
@@ -116,19 +133,54 @@ var PlayerList = Backbone.Collection.extend({
 
 
 /*
+## Router
+*/
+
+var Router = Backbone.Router.extend({
+  
+  routes: {
+    '': 'home',
+    '/:id': 'room'
+  },
+  
+  hone: function() {
+    console.log('home');
+  },
+  
+  room: function(id) {
+    console.log('room', id);
+  }
+  
+});
+
+
+
+/*
 ## View
 */
 
-var View = Backbone.View.extend({
+var ViewArgs = {
   
   el: '#view',
   
   events: {
-    'change .js-input': 'changePlayerData'
+    'change .js-input': 'changePlayerData',
+    'click .js-shuffle': 'shuffle',
+    'click .js-save': 'save'
   },
   
   initialize: function() {
-    _.bindAll(this, 'render', 'sync', 'shuffle', 'receiveData', 'changePlayerData', 'save');
+    _.bindAll(this, 'render', 'shuffle',
+      'sync_players', 'sync_attrs',
+      'receive_players', 'receive_attrs',
+      'changePlayerData'
+    );
+    
+    this.router = new Router();
+    Backbone.history.start();
+    
+    
+    this.$contents = this.$('.js-contents');
     
     this.template = {
       view: _.template( $('#view-template').html() ),
@@ -138,71 +190,81 @@ var View = Backbone.View.extend({
     this.attrs = new ViewModel();
     this.players = new PlayerList();
     
-    this.attrs.on('change', this.render);
-    this.attrs.on('change', this.sync);
+    this.players.on('change', _.bind(function() {
+      var html = this.players.map(_.bind(function(model, index) {
+        return this.template.weaponsItem( model.toJSON() );
+      }, this)).join('');
+      this.attrs.set('weaponsItemHTML', html);
+      console.log('players', 'change');
+    }, this));
     
-    $('#shuffle').click(this.shuffle);
+    //this.load();
     
-    this.load();
+    this.players.on('change', this.render);
+    this.players.on('change', this.sync_players);
+    this.players.on('change', this.sync_attrs);
+    this.on('sync_players', this.sync_players);
+    this.on('sync_attrs', this.sync_attrs);
+    
+    socket.on('receive_players', this.receive_players);
+    socket.on('receive_attrs', this.receive_attrs);
+    socket.emit('connected');
+    
+    //this.render();
+  },
+  
+  shuffle: function(e) {
+    console.count('shuffle');
+    this.players.shuffleWeapon();
+    this.trigger('sync_players');
+    this.trigger('sync_attrs');
+  },
+  
+  receive_players: function(players) {
+    console.count('receive_players');
+    console.log(players, null === players);
+    if((null === players || undefined === players) && 0 === this.players.length) {
+      for(var i = 0; i < 8; i++){
+        this.players.add({
+          index: i
+        });
+      }
+    } else {
+      players = JSON.parse(players);
+      this.players.set(players, {silent: true});
+    }
+    console.log('players', this.players);
+    //
+    /*
+    var html = this.players.map(_.bind(function(player) {
+      return this.template.weaponsItem( player.attributes );
+    }, this)).join('');
+    this.attrs.set('weaponsItemHTML', html);
+    */
+  },
+  
+  receive_attrs: function(attrs) {
+    console.count('receive_attrs');
+    //var attrsStr = JSON.stringify(this.attrs.attributes);
+    if( null != attrs ){
+      attrs = JSON.parse(attrs);
+      this.attrs.set(attrs, {silent: true});
+      notice('シャッフルしたでし！');
+    }
     
     var html = this.players.map(_.bind(function(player) {
       return this.template.weaponsItem( player.attributes );
     }, this)).join('');
     this.attrs.set('weaponsItemHTML', html);
     
-    this.players.on('change', _.bind(function() {
-      var html = this.players.map(_.bind(function(model, index) {
-        return this.template.weaponsItem( model.toJSON() );
-      }, this)).join('');
-      this.attrs.set('weaponsItemHTML', html);
-    }, this));
-    //this.players.on('change', this.sync);
-    this.players.on('change', this.save);
-    
-    socket.on('receive_data', this.receiveData);
-  },
-  
-  shuffle: function() {
-    this.players.shuffleWeapon();
-  },
-  
-  load: function() {
-    var players = $.cookie('players');
-    if( players ) {
-      players = JSON.parse(players);
-      console.log('load', players);
-      this.players.set(players);
-    } else {
-      for(var i = 0; i < player_num; i++) {
-        this.players.add({index: i});
-      }
-    }
-  },
-  
-  save: function() {
-    var players = this.players.toJSON();
-    players = JSON.stringify(players);
-    $.cookie('players', players, {expires: 365, path: '/'});
-  },
-  
-  receiveData: function(data) {
-    data = JSON.parse(data);
-    //console.log('receive_data', data, typeof data);
-    this.attrs.set(data, {silent: true});
     this.render();
-    notice('シャッフルしたでし！');
   },
   
   render: function() {
-    console.log('render');
+    console.count('render');
     var html = this.template.view( this.attrs.attributes );
-    this.$el.html(html);
+    this.$contents.html(html);
     return this;
-  },
-  
-  sync: function() {
-    var data = JSON.stringify( this.attrs.attributes );
-    socket.emit('send_data', data);
   },
   
   changePlayerData: function(e) {
@@ -213,7 +275,66 @@ var View = Backbone.View.extend({
     this.players.at(player).set(item, val);
   }
   
-});
+};
+
+
+
+/*
+### セーブ＆ロード
+*/
+
+ViewArgs = _.extend({
+  
+  save: function() {
+    console.count('save');
+    var players = this.players.toJSON();
+    players = JSON.stringify(players);
+    $.cookie('players', players, {expires: 365, path: '/'});
+    notice('セーブしたでし！');
+  },
+  
+  load: function() {
+    console.group('load');
+    var players = $.cookie('players');
+    if( players ) {
+      //console.log(players);
+      players = JSON.parse(players);
+      console.log(players);
+      this.players.set(players);
+    } else {
+      for(var i = 0; i < player_num; i++) {
+        this.players.add({index: i});
+      }
+    }
+    console.groupEnd();
+  }
+  
+}, ViewArgs);
+
+
+
+/*
+### Socketとやり取り
+*/
+
+ViewArgs = _.extend({
+  
+  sync_players: function() {
+    var players = JSON.stringify( this.players.toJSON() );
+    socket.emit('sync_players', players);
+  },
+  
+  sync_attrs: function() {
+    var attrs = JSON.stringify( this.attrs.toJSON() );
+    socket.emit('sync_attrs', attrs);
+    notice('みんなに共有したでし！');
+  }
+  
+}, ViewArgs);
+
+
+//
+var View = Backbone.View.extend(ViewArgs);
 
 
 
