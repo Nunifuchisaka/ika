@@ -1,0 +1,74 @@
+{{> header}}
+{{$content}}
+
+
+<div id="view" style="margin-top: 1em">
+  <div class="js-contents"></div>
+  <div style="margin-top: 1em;text-align: center;">
+    <button class="button-1 button-1-l1 js-shuffle" tabindex="9">シャッフル</button>
+  </div>
+  <!-- 
+  <div style="margin-top: .5em;text-align: center;">
+    <button class="button-1 button-1-l1 js-save" tabindex="9">セーブ</button>
+  </div>
+   -->
+</div>
+
+
+<div id="modal-1__overlay"></div>
+<div id="modal-1__wrapper">
+  <div id="modal-1">
+    <div id="modal-1__contents"></div>
+    <div id="modal-1__clone"></div>
+  </div>
+</div>
+
+<script id="modal-1-template" type="text/template">
+  <section class="section-1">
+    <header class="section-1__header">
+      <h1 class="section-1__h1">
+        <%- name %>
+      </h1>
+    </header>
+    <div class="section-1__contents">
+      <%- ca.categorys_jp[category] %>
+    </div>
+  </section>
+</script>
+
+
+<script id="view-template" type="text/template">
+  <div class="paragraphs-1">
+    <p>最終更新&emsp;&ensp;<%- finalUpdateTime %>&emsp;<small><%- finalUpdateDate %></small></p>
+  </div>
+  <div id="weapons" class="list-1" style="margin-top: 1em">
+    <ul class="list-1__items">
+      <%= weaponsItemHTML %>
+    </ul>
+  </div>
+</script>
+
+
+<script id="weapons-item-template" type="text/template">
+  <li id="player-<%- index %>" class="list-1__item">
+    <div class="list-1__item__1 name">
+      <input class="js-input input-1" type="text" name="name" value="<%- name %>" data-player="<%- index %>" tabindex="<%- index + 1 %>" placeholder="なまえ" />
+    </div>
+    <div class="list-1__item__2 weapon">
+      <!-- <img src="/assets/img/buki-<%- buki %>-tn.png" alt="" width="63" /> -->
+      <a href="#buki-<%- buki %>" class="js-modal-1__trigger" data-buki-index="<%- buki %>">
+        <%- buki_jp %>
+      </a>
+    </div>
+  </li>
+</script>
+
+
+<script src="/assets/js/buki_data.js"></script>
+<script>
+  IKA.roomID = "{{roomID}}";
+</script>
+<script src="/assets/js/roulette.js"></script>
+
+{{/content}}
+{{> footer}}

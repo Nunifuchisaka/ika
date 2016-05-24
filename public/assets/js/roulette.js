@@ -2,7 +2,8 @@
 'use strict';
 
 var socket = io();
-//var socket = io.connect('http://localhost:3000/chat/1?id=1');
+//var socket = io.connect(window.location.href);
+console.log(window.location.href);
 
 var player_num = 8;
 
@@ -170,6 +171,7 @@ var ViewArgs = {
   },
   
   initialize: function() {
+    var self = this;
     _.bindAll(this, 'render', 'shuffle',
       'sync_players', 'sync_attrs',
       'receive_players', 'receive_attrs',
@@ -208,9 +210,16 @@ var ViewArgs = {
     
     socket.on('receive_players', this.receive_players);
     socket.on('receive_attrs', this.receive_attrs);
-    socket.emit('connected');
-    
-    //this.render();
+    /*
+    socket.on('s2c_connected', function(args){
+      console.log('s2c_connected');
+      console.log('roomID', IKA.roomID);
+    });
+    //socket.emit('c2s_connected');
+    */
+    socket.emit('c2s_connected', {
+      roomID: IKA.roomID
+    });
   },
   
   shuffle: function(e) {

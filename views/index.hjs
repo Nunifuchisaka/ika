@@ -1,0 +1,13 @@
+{{> header}}
+{{$content}}
+
+<nav class="nav-1">
+  <ul class="nav-1__items">
+    <li class="nav-1__item">
+      <a href="/room">部屋を作る</a>
+    </li>
+  </ul>
+</nav>
+
+{{/content}}
+{{> footer}}

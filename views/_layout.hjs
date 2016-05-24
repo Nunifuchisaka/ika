@@ -1,0 +1,5 @@
+{{> header}}
+{{$content}}
+  default content
+{{/content}}
+{{> footer}}

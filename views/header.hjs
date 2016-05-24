@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja_JP">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+
+<title>{{title}}CambriArms</title>
+
+<!-- StyleSheet -->
+<link href='https://fonts.googleapis.com/css?family=Indie+Flower' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/assets/css/common.css">
+
+<!-- JavaScript -->
+<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+<script src="/assets/libs/jquery.easing.js"></script>
+<script src="/assets/libs/jquery.cookie.js"></script>
+<script src="/assets/libs/lodash.js"></script>
+<script src="/assets/libs/backbone.js"></script>
+<script src="/assets/libs/xdate.js"></script>
+<script src="/assets/js/common.js"></script>
+
+</head>
+<body id="top" class="theme-black-1">
+
+<div class="l-wrapper-1">
+  <header class="l-header-1">
+    <div class="l-header-1__1">
+      <h1 class="l-header-1__h1">CAMBRIARMS</h1>
+    </div>
+    <div class="l-header-1__2">
+      <a href="#gnav" class="button-2 js-gnav-toggle"><span></span><span></span><span></span></a>
+    </div>
+  </header>
+  <nav id="gnav" class="nav-1 is-close">
+    <ul class="nav-1__items">
+      <li class="nav-1__item">
+        <a href="/">トップページ</a>
+      </li>
+    </ul>
+  </nav>
